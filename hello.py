@@ -1,5 +1,6 @@
 from google import genai
 from google.genai.types import Tool, GenerateContentConfig, GoogleSearch
+from pydantic import BaseModel
 import enum
 
 class Score(enum.Enum):
@@ -8,6 +9,10 @@ class Score(enum.Enum):
     NEUTRAL = "Neutral"
     BULLISH = "Bullish"
     BULL = "Bull"
+
+class Result(BaseModel):
+    score: Score
+
 
 def main():
     client = genai.Client()
@@ -41,7 +46,7 @@ def main():
         Generate a score from 1 to 5 where 1 is bear and 5 is bullish market. Be very concise.
         """,
         config=GenerateContentConfig(
-            response_mime_type="application/json", response_schema=Score
+            response_mime_type="application/json", response_schema=Result
         ),
     )
 
