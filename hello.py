@@ -1,17 +1,17 @@
 from google import genai
 from google.genai.types import Tool, GenerateContentConfig, GoogleSearch
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 import enum
 
-class Score(enum.Enum):
+class Score(str, enum.Enum):
     BEAR = "Bear"
     BEARISH = "Bearish"
     NEUTRAL = "Neutral"
     BULLISH = "Bullish"
     BULL = "Bull"
-
+    
 class Result(BaseModel):
-    score: Score
+    score: int
 
 
 def main():
@@ -24,7 +24,7 @@ def main():
 
     response = client.models.generate_content(
         model=model_id,
-        contents="Using latest crypto news evaluate the sentiment on eth for the last hour",
+        contents="Using latest crypto news evaluate the sentiment on eth for the last hour. be very brief",
         config=GenerateContentConfig(
             tools=[google_search_tool],
             response_modalities=["TEXT"],
